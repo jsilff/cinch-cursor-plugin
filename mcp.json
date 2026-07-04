@@ -1,0 +1,24 @@
+{
+  "mcpServers": {
+    "cinch": {
+      "type": "http",
+      "url": "https://app.cinch.work/mcp",
+      "_meta": {
+        "ideToolIconPath": "./assets/logo.svg",
+        "ideToolTitles": {
+          "create_project": "Create Project",
+          "list_projects": "List Projects",
+          "get_project": "Get Project",
+          "create_task": "Create Task",
+          "list_tasks": "List Tasks",
+          "get_task": "Get Task",
+          "update_task": "Update Task",
+          "create_comment": "Create Comment",
+          "list_comments": "List Comments",
+          "list_companies": "List Companies",
+          "get_company": "Get Company"
+        }
+      }
+    }
+  }
+}

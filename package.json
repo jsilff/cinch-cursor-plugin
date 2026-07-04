@@ -1,0 +1,14 @@
+{
+  "name": "cinch-cursor-plugin",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Official Cinch plugin for Cursor",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jsilff/cinch-cursor-plugin.git"
+  },
+  "scripts": {
+    "validate": "node scripts/validate-plugin.mjs"
+  }
+}

@@ -1,0 +1,15 @@
+---
+description: Format Cinch task statuses and project labels for user-facing text
+alwaysApply: true
+---
+
+# Cinch UI Labels
+
+When writing user-facing text about Cinch tasks and projects:
+
+- Task status: `TODO` → **Todo**, `IN_PROGRESS` → **In Progress**, `IN_REVIEW` → **In Review** (Title Case, not raw enums)
+- Project names: prefer the project `name`; never show raw keys like `STANDUP` or `ER` in badges or summaries
+- Section headings and card titles: Title Case (`Recent Tasks`, not `Recent tasks`)
+- Do not use `.replace('_', ' ')` on status strings — it leaves ALL CAPS and only replaces the first underscore
+
+When calling Cinch MCP tools, use API enum values (`TODO`, `IN_PROGRESS`, etc.) in tool arguments. Apply Title Case only in messages shown to the user.

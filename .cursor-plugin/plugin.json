@@ -1,0 +1,24 @@
+{
+  "name": "cinch",
+  "displayName": "Cinch",
+  "version": "1.0.0",
+  "description": "Official Cinch plugin for Cursor: hosted MCP integration, skills, and rules for project and task management",
+  "author": {
+    "name": "Fearless Future",
+    "email": "hello@fearlessfuture.com"
+  },
+  "license": "MIT",
+  "logo": "assets/logo.svg",
+  "homepage": "https://app.cinch.work",
+  "repository": "https://github.com/jsilff/cinch-cursor-plugin",
+  "keywords": [
+    "cinch",
+    "project-management",
+    "tasks",
+    "mcp",
+    "productivity"
+  ],
+  "skills": "./skills/",
+  "rules": "./rules/",
+  "mcpServers": "./mcp.json"
+}
