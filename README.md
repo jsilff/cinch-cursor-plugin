@@ -29,11 +29,26 @@ Install the **Cinch** plugin from Cursor **Customize**, then:
 2. Connect **cinch** and complete OAuth in the browser
 3. Quit Cursor completely (Cmd+Q), reopen, and start a new Agent chat
 
-### Manual / Development
+### Local Testing
 
-1. Clone this repository
-2. Install the plugin locally in Cursor (Customize → Install from folder, or per Cursor plugin dev docs)
-3. Validate the manifest:
+Cursor supports two local test flows:
+
+**Option A — Copy or symlink into the local plugins folder (fastest iteration)**
+
+```bash
+ln -s "/Users/jonathan/Dropbox/Fearless Future/Project Management Web App/cinch-cursor-plugin" \
+  ~/.cursor/plugins/local/cinch
+```
+
+Then restart Cursor or run **Developer: Reload Window**. The plugin appears under **Customize → Installed**.
+
+**Option B — Import the repo as a team marketplace**
+
+Requires `.cursor-plugin/marketplace.json` at the repo root (included in this repo). Use **Dashboard → Plugins → Add Marketplace → Import from Repo**, or point Cursor at your GitHub repo URL.
+
+After changing plugin files, restart Cursor or reload the window.
+
+Validate before publishing:
 
 ```bash
 npm run validate
@@ -64,6 +79,7 @@ For PAT-based local setup without OAuth, use the separate [cinch-mcp-server](htt
 ```
 cinch-cursor-plugin/
 ├── .cursor-plugin/
+│   ├── marketplace.json  # Required for repo / team marketplace import
 │   └── plugin.json       # Plugin manifest
 ├── assets/
 │   └── logo.svg

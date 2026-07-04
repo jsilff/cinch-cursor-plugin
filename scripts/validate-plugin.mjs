@@ -9,6 +9,7 @@ const errors = [];
 const warnings = [];
 
 const pluginNamePattern = /^[a-z0-9](?:[a-z0-9.-]*[a-z0-9])?$/;
+const marketplaceNamePattern = /^[a-z0-9](?:[a-z0-9-]*[a-z0-9])?$/;
 
 function addError(message) {
   errors.push(message);
@@ -195,7 +196,119 @@ async function validateComponentFrontmatter(pluginDir, pluginName) {
   }
 }
 
+function resolveMarketplaceSource(source, pluginRoot) {
+  if (typeof source !== "string" || source.length === 0) {
+    return null;
+  }
+  if (!pluginRoot) {
+    return source;
+  }
+  const normalizedRoot = pluginRoot.replace(/\\/g, "/").replace(/\/+$/, "");
+  const normalizedSource = source.replace(/\\/g, "/");
+  if (normalizedSource === normalizedRoot || normalizedSource.startsWith(`${normalizedRoot}/`)) {
+    return normalizedSource;
+  }
+  return `${normalizedRoot}/${normalizedSource}`;
+}
+
+async function validateMarketplace() {
+  const marketplacePath = path.join(repoRoot, ".cursor-plugin", "marketplace.json");
+  const marketplace = await readJsonFile(marketplacePath, "Marketplace manifest");
+  if (!marketplace) {
+    addError("Marketplace manifest is missing: .cursor-plugin/marketplace.json");
+    return;
+  }
+
+  if (typeof marketplace.name !== "string" || !marketplaceNamePattern.test(marketplace.name)) {
+    addError(
+      'Marketplace "name" must be lowercase kebab-case and start/end with an alphanumeric character.'
+    );
+  }
+
+  if (!marketplace.owner || typeof marketplace.owner.name !== "string" || marketplace.owner.name.length === 0) {
+    addError('Marketplace "owner.name" is required.');
+  }
+
+  if (!Array.isArray(marketplace.plugins) || marketplace.plugins.length === 0) {
+    addError('Marketplace "plugins" must be a non-empty array.');
+    return;
+  }
+
+  const pluginRoot = marketplace.metadata?.pluginRoot;
+  if (pluginRoot !== undefined) {
+    if (typeof pluginRoot !== "string" || !isSafeRelativePath(pluginRoot)) {
+      addError('Marketplace "metadata.pluginRoot" must be a safe relative path.');
+    } else {
+      const pluginRootAbs = path.join(repoRoot, pluginRoot);
+      try {
+        const stat = await fs.stat(pluginRootAbs);
+        if (!stat.isDirectory()) {
+          addError(`Marketplace "metadata.pluginRoot" exists but is not a directory: ${pluginRoot}`);
+        }
+      } catch {
+        addError(`Marketplace "metadata.pluginRoot" directory is missing: ${pluginRoot}`);
+      }
+    }
+  }
+
+  const seenNames = new Set();
+  for (const [index, entry] of marketplace.plugins.entries()) {
+    const label = `plugins[${index}]`;
+
+    if (!entry || typeof entry !== "object") {
+      addError(`${label} must be an object.`);
+      continue;
+    }
+
+    if (typeof entry.name !== "string" || !pluginNamePattern.test(entry.name)) {
+      addError(`${label}.name must be lowercase and use only alphanumerics, hyphens, and periods.`);
+      continue;
+    }
+
+    if (seenNames.has(entry.name)) {
+      addError(`Duplicate plugin name in marketplace manifest: "${entry.name}"`);
+    }
+    seenNames.add(entry.name);
+
+    const sourcePath = resolveMarketplaceSource(entry.source, pluginRoot ?? "");
+    if (!sourcePath) {
+      addError(`${label}.source must be a string path.`);
+      continue;
+    }
+    if (!isSafeRelativePath(sourcePath)) {
+      addError(`${label}.source is not a safe relative path: "${sourcePath}"`);
+      continue;
+    }
+
+    const pluginDir = path.join(repoRoot, sourcePath);
+    try {
+      const stat = await fs.stat(pluginDir);
+      if (!stat.isDirectory()) {
+        addError(`${label}.source exists but is not a directory: ${sourcePath}`);
+        continue;
+      }
+    } catch {
+      addError(`${label}.source directory is missing: ${sourcePath}`);
+      continue;
+    }
+
+    const entryManifestPath = path.join(pluginDir, ".cursor-plugin", "plugin.json");
+    const entryManifest = await readJsonFile(entryManifestPath, `${entry.name} plugin manifest`);
+    if (!entryManifest) {
+      continue;
+    }
+
+    if (entryManifest.name && entryManifest.name !== entry.name) {
+      addError(
+        `${entry.name}: marketplace entry name does not match plugin.json name ("${entryManifest.name}").`
+      );
+    }
+  }
+}
+
 async function main() {
+  await validateMarketplace();
+
   const pluginDir = repoRoot;
   const manifestPath = path.join(pluginDir, ".cursor-plugin", "plugin.json");
   const pluginManifest = await readJsonFile(manifestPath, "Plugin manifest");

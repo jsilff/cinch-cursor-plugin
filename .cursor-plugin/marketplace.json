@@ -1,0 +1,18 @@
+{
+  "name": "cinch",
+  "owner": {
+    "name": "Fearless Future",
+    "email": "hello@fearlessfuture.com"
+  },
+  "metadata": {
+    "description": "Cinch project management plugins for Cursor",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "cinch",
+      "source": ".",
+      "description": "Official Cinch plugin: hosted MCP integration, skills, and rules for project and task management"
+    }
+  ]
+}
