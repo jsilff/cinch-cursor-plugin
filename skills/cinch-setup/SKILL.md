@@ -5,11 +5,21 @@ description: Connect Cinch to Cursor via the hosted MCP plugin or the local stdi
 
 # Cinch Setup
 
-## Recommended: Cursor plugin (this repo)
+## Recommended: one-click deeplink or Cursor plugin
+
+**Fastest — MCP install deeplink** (opens Cursor and starts OAuth):
+
+```text
+cursor://anysphere.cursor-deeplink/mcp/install?name=cinch&config=eyJ0eXBlIjoiaHR0cCIsInVybCI6Imh0dHBzOi8vYXBwLmNpbmNoLndvcmsvbWNwIn0=
+```
+
+Or run **`/connect-cinch`** after the plugin is installed.
+
+**Plugin path:**
 
 1. Install the **Cinch** plugin from Cursor Customize / Marketplace.
 2. Open **Settings → Tools & MCP** and confirm **cinch** appears.
-3. Click **Connect** and complete OAuth in the browser.
+3. Click **Connect** (or use `/connect-cinch`) and complete OAuth in the browser.
 4. Quit Cursor completely (Cmd+Q), reopen, and start a new Agent chat.
 5. Verify tools such as `list_projects` and `list_tasks` are available.
 
@@ -26,7 +36,7 @@ The plugin registers the hosted MCP endpoint:
 }
 ```
 
-OAuth runs automatically; no Personal Access Token is required for this path.
+OAuth runs via Connect / deeplink; no Personal Access Token is required for this path.
 
 ## Alternative: Local stdio MCP server
 

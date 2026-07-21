@@ -15,17 +15,31 @@ Official [Cursor](https://cursor.com) plugin for [Cinch](https://app.cinch.work)
 - **cinch-mcp** — Workflow guidance for all Cinch MCP tools
 - **cinch-setup** — Install, OAuth, and troubleshooting
 
+### Commands
+
+- **`/connect-cinch`** — Open the MCP install deeplink and complete OAuth
+
 ### Rules
 
 - **cinch-task-labels** — Title Case labels for statuses and projects in user-facing text
 
 ## Installation
 
+### One-click MCP install (OAuth)
+
+Open this deeplink to add the hosted Cinch MCP server and start OAuth:
+
+```text
+cursor://anysphere.cursor-deeplink/mcp/install?name=cinch&config=eyJ0eXBlIjoiaHR0cCIsInVybCI6Imh0dHBzOi8vYXBwLmNpbmNoLndvcmsvbWNwIn0=
+```
+
+Or run the **`/connect-cinch`** command after installing the plugin.
+
 ### From Cursor Marketplace
 
 Install the **Cinch** plugin from Cursor **Customize**, then:
 
-1. Open **Settings → Tools & MCP**
+1. Open **Settings → Tools & MCP** (or use `/connect-cinch`)
 2. Connect **cinch** and complete OAuth in the browser
 3. Quit Cursor completely (Cmd+Q), reopen, and start a new Agent chat
 
@@ -84,6 +98,8 @@ cinch-cursor-plugin/
 ├── assets/
 │   └── logo.svg
 ├── mcp.json              # Hosted MCP server config
+├── commands/
+│   └── connect-cinch.md
 ├── rules/
 │   └── cinch-task-labels.mdc
 ├── skills/

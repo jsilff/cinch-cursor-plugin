@@ -1,7 +1,7 @@
 {
   "name": "cinch",
   "displayName": "Cinch",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Official Cinch plugin for Cursor: hosted MCP integration, skills, and rules for project and task management",
   "author": {
     "name": "Fearless Future",
@@ -20,5 +20,6 @@
   ],
   "skills": "./skills/",
   "rules": "./rules/",
+  "commands": "./commands/",
   "mcpServers": "./mcp.json"
 }

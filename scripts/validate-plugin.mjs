@@ -194,6 +194,17 @@ async function validateComponentFrontmatter(pluginDir, pluginName) {
       }
     }
   }
+
+  const commandsDir = path.join(pluginDir, "commands");
+  if (await pathExists(commandsDir)) {
+    const files = await walkFiles(commandsDir);
+    for (const file of files) {
+      const ext = path.extname(file).toLowerCase();
+      if (ext === ".md" || ext === ".mdc" || ext === ".markdown" || ext === ".txt") {
+        await validateFrontmatterFile(file, "command", ["name", "description"], pluginName);
+      }
+    }
+  }
 }
 
 function resolveMarketplaceSource(source, pluginRoot) {
