@@ -27,6 +27,9 @@ Use the Cinch MCP server to read and write project management data in [Cinch](ht
 3. **Read before write** — call `get_task` or `get_project` before destructive or broad updates.
 4. **Confirm IDs** — never guess project or task IDs; list first, then act on returned IDs.
 5. **Paginate** — pass `cursor` from list responses when results may be truncated.
+6. **Preserve schedule metadata** — when changing a timed task, carry forward
+   `dueTimeZone` and `startTimeZone` from `get_task` unless the user explicitly
+   asks to remove the time.
 
 ## Tools
 
@@ -68,6 +71,21 @@ Show Title Case labels to the user (e.g. **In Progress**), not raw enums.
 
 1. `get_task` to confirm the correct record
 2. `update_task` with `status: "DONE"`
+
+**Create or update timed tasks**
+
+- Cinch title syntax accepts `today @ 3`, `Jan 3 at 3:30pm`,
+  `on the 5th in the morning`, and equivalent date/time phrases.
+- For direct tool fields, pair a timed ISO value with its source IANA timezone:
+  `dueDate: "2027-01-03T20:30:00.000Z"` and
+  `dueTimeZone: "America/New_York"`.
+- Date-only values omit the timezone field.
+- A recurring timed task uses the stored source timezone to keep the same local
+  wall-clock time through daylight-saving transitions.
+- To remove a due time but retain its date, first read the task, then call
+  `update_task` with `dueTimeZone: null` and omit `dueDate`.
+- When reading a task, treat a non-null `dueTimeZone`/`startTimeZone` as the
+  signal that its corresponding ISO date is timed rather than date-only.
 
 ## Troubleshooting
 
