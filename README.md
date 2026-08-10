@@ -7,7 +7,7 @@ Official [Cursor](https://cursor.com) plugin for [Cinch](https://app.cinch.work)
 ### MCP Server Integration
 
 - One-click connection to `https://app.cinch.work/mcp` (OAuth)
-- 11 tools: projects, tasks, comments, and organizations
+- 15 tools: projects, tasks (including copy/move), comments, and organizations
 - Organization resources for multi-company accounts
 
 ### Skills
@@ -79,6 +79,10 @@ npm run validate
 | `list_tasks` | List/filter tasks |
 | `get_task` | Task details |
 | `update_task` | Update a task |
+| `copy_task` | Copy a task to another project |
+| `move_task` | Move a task to another project |
+| `bulk_copy_tasks` | Bulk copy tasks to another project |
+| `bulk_move_tasks` | Bulk move tasks to another project |
 | `create_comment` | Add a comment |
 | `list_comments` | List comments |
 | `list_companies` | List organizations |
