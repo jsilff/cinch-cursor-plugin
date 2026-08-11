@@ -76,12 +76,24 @@ Show Title Case labels to the user (e.g. **In Progress**), not raw enums.
 1. `get_task` to confirm the correct record
 2. `update_task` with `status: "DONE"`
 
-**Copy or move a task to another project**
+**Copy a task to another project**
 
 1. `list_projects` → find source and `targetProjectId`
-2. `get_task` (or `list_tasks`) to confirm the task id
-3. `copy_task` or `move_task` with `{ taskId, targetProjectId }`
-4. For many tasks in one project, use `bulk_copy_tasks` / `bulk_move_tasks` with `{ projectId, taskIds, targetProjectId }`
+2. `get_task` or `list_tasks` to confirm the task id
+3. `copy_task` with `{ taskId, targetProjectId }`
+
+**Move a task to another project**
+
+1. `list_projects` → find source and `targetProjectId`
+2. `get_task` to confirm the task and review its subtasks (moves include the full subtree)
+3. `move_task` with `{ taskId, targetProjectId }`
+
+**Bulk copy or move tasks**
+
+1. `list_projects` → find source `projectId` and `targetProjectId`
+2. `list_tasks` / `get_task` as needed to gather ids
+3. For moves, call `get_task` on each root you intend to move so subtasks are visible before the destructive transfer
+4. `bulk_copy_tasks` or `bulk_move_tasks` with `{ projectId, taskIds, targetProjectId }`
 
 **Create or update timed tasks**
 
