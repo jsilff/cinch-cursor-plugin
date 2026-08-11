@@ -43,7 +43,11 @@ Use the Cinch MCP server to read and write project management data in [Cinch](ht
 | `list_tasks` | Filter by `projectId`, `status`, `assigneeId`, `parentId` |
 | `get_task` | Full task with comments, tags, subtasks |
 | `create_task` | New task in a project |
-| `update_task` | Change status, assignee, dates, title, etc. |
+| `update_task` | Change status, assignee, dates, title, etc. (not project) |
+| `copy_task` | Copy a task and its subtasks to another project |
+| `move_task` | Move a task and its subtasks to another project |
+| `bulk_copy_tasks` | Copy multiple tasks from one project to another |
+| `bulk_move_tasks` | Move multiple tasks from one project to another |
 | `list_comments` | Thread on a task |
 | `create_comment` | Add comment (supports @mentions in content) |
 
@@ -71,6 +75,25 @@ Show Title Case labels to the user (e.g. **In Progress**), not raw enums.
 
 1. `get_task` to confirm the correct record
 2. `update_task` with `status: "DONE"`
+
+**Copy a task to another project**
+
+1. `list_projects` → find source and `targetProjectId`
+2. `get_task` or `list_tasks` to confirm the task id
+3. `copy_task` with `{ taskId, targetProjectId }`
+
+**Move a task to another project**
+
+1. `list_projects` → find source and `targetProjectId`
+2. `get_task` to confirm the task and review its subtasks (moves include the full subtree)
+3. `move_task` with `{ taskId, targetProjectId }`
+
+**Bulk copy or move tasks**
+
+1. `list_projects` → find source `projectId` and `targetProjectId`
+2. `list_tasks` / `get_task` as needed to gather ids
+3. For moves, call `get_task` on each root you intend to move so subtasks are visible before the destructive transfer
+4. `bulk_copy_tasks` or `bulk_move_tasks` with `{ projectId, taskIds, targetProjectId }`
 
 **Create or update timed tasks**
 

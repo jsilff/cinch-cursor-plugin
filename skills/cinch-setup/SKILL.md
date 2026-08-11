@@ -62,7 +62,7 @@ Use when OAuth is unavailable or the user prefers a PAT:
 }
 ```
 
-5. Quit and reopen Cursor; confirm 11 tools are listed under **cinch**.
+5. Quit and reopen Cursor; confirm 15 tools are listed under **cinch**.
 
 Do **not** use the **Dashboard / Export** token preset for MCP — it is project-scoped and lacks write scopes needed by AI assistants.
 
