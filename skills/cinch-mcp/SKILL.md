@@ -40,10 +40,11 @@ Use the Cinch MCP server to read and write project management data in [Cinch](ht
 | `list_projects` | Projects (optional `companyId`, `groupId`, `includeArchived`) |
 | `get_project` | Project details, members, custom fields |
 | `create_project` | New project (`name`, `key`, optional `description`, `color`) |
-| `list_tasks` | Filter by `projectId`, `status`, `assigneeId`, `parentId` |
-| `get_task` | Full task with comments, tags, subtasks |
-| `create_task` | New task in a project |
-| `update_task` | Change status, assignee, dates, title, etc. (not project) |
+| `list_tasks` | Filter by `projectId`, `status`, `assigneeId`, `parentId`. Includes section dividers (`kind`, `sortOrder`) |
+| `get_task` | Full task with comments, tags, subtasks. `kind` is `TASK` or `DIVIDER` |
+| `create_task` | New task in a project. Does not create section dividers |
+| `create_section_divider` | Labeled section divider (`projectId`, `title`, optional `beforeTaskId`) |
+| `update_task` | Change status, assignee, dates, title, etc. (not project). A section divider only accepts a title change |
 | `copy_task` | Copy a task and its subtasks to another project |
 | `move_task` | Move a task and its subtasks to another project |
 | `bulk_copy_tasks` | Copy multiple tasks from one project to another |
@@ -59,12 +60,28 @@ Use these enum values in tool arguments:
 
 Show Title Case labels to the user (e.g. **In Progress**), not raw enums.
 
+## Section dividers
+
+A section divider is a root row with `kind: "DIVIDER"`. It is not a parent task. Tasks that follow it in `sortOrder` belong to that section until the next divider.
+
+- Create one with `create_section_divider`, not `create_task` and not a parent task with subtasks.
+- `title` is 1–100 characters. Say **Section Divider** in user-facing text. Never show the raw `DIVIDER` value.
+- Omit `beforeTaskId` to append the divider. Pass a top-level task id to insert the divider immediately before that task.
+- `list_tasks` and `get_task` include dividers. Use `kind` and `sortOrder` to place them.
+- Rename a divider with `update_task` `{ id, title }`. Do not set status, assignee, dates, or a parent on a divider.
+
 ## Common patterns
 
 **List my open tasks in a project**
 
 1. `list_projects` → find `projectId`
 2. `list_tasks` with `projectId` and `status: "IN_PROGRESS"` (repeat for `TODO` if needed)
+
+**Create a section divider before a task**
+
+1. `list_tasks` with `projectId` and note root rows (`parentId` null), including `kind: "DIVIDER"`
+2. `create_section_divider` with `{ projectId, title, beforeTaskId }` where `beforeTaskId` is the top-level task the divider should precede
+3. Omit `beforeTaskId` only when the divider should sit at the end of the list
 
 **Create a task with a comment**
 

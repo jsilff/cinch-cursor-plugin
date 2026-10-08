@@ -8,6 +8,7 @@ alwaysApply: true
 When writing user-facing text about Cinch tasks and projects:
 
 - Task status: `TODO` → **Todo**, `IN_PROGRESS` → **In Progress**, `IN_REVIEW` → **In Review** (Title Case, not raw enums)
+- Section dividers: `kind: DIVIDER` → **Section Divider**. Never show the raw `DIVIDER` value. A section divider is not a parent task
 - Project names: prefer the project `name`; never show raw keys like `STANDUP` or `ER` in badges or summaries
 - Section headings and card titles: Title Case (`Recent Tasks`, not `Recent tasks`)
 - Do not use `.replace('_', ' ')` on status strings — it leaves ALL CAPS and only replaces the first underscore
